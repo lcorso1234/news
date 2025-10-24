@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "./auth/[...nextauth]";
-=======
->>>>>>> main
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -46,18 +41,7 @@ export const config = {
 };
 
 export default async function handler(req, res) {
-<<<<<<< HEAD
-  const authDisabled = process.env.ADMIN_AUTH_DISABLED === "true";
-  const session = authDisabled
-    ? null
-    : await getServerSession(req, res, authOptions);
-
-  if (!authDisabled && !session) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
-=======
->>>>>>> main
+  // Authentication removed — uploads open
   if (req.method === "POST") {
     upload.single("file")(req, res, (err) => {
       if (err) {

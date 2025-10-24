@@ -1,16 +1,4 @@
-<<<<<<< HEAD
-import { useSession } from "next-auth/react";
-=======
->>>>>>> main
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-
 export default function NewContent() {
-<<<<<<< HEAD
-  const { data: session, status } = useSession();
-=======
->>>>>>> main
   const router = useRouter();
   const {
     register,
@@ -65,11 +53,7 @@ export default function NewContent() {
     setUploading(false);
   };
 
-<<<<<<< HEAD
-  if (status === "loading") return <div>Loading...</div>;
-
-=======
->>>>>>> main
+  // auth removed — open admin
   return (
     <div className="min-h-screen bg-gray-100 py-10">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">

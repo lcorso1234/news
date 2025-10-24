@@ -1,13 +1,6 @@
-<<<<<<< HEAD
-# Dependencies
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Next.js
 .next/
-out/
+/out/
 
 # Environment variables
 .env.local
@@ -37,7 +30,7 @@ Thumbs.db
 # Archives
 *.tar.gz
 *.zip
-=======
-node_modules
+
+# Local restored copy directory (ignored)
 news-restored
->>>>>>> main
+

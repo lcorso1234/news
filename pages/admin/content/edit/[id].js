@@ -1,16 +1,4 @@
-<<<<<<< HEAD
-import { useSession } from "next-auth/react";
-=======
->>>>>>> main
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-
 export default function EditContent() {
-<<<<<<< HEAD
-  const { data: session, status } = useSession();
-=======
->>>>>>> main
   const router = useRouter();
   const { id } = router.query;
   const {
@@ -25,19 +13,11 @@ export default function EditContent() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-<<<<<<< HEAD
-=======
-    if (status === "loading") return;
-    const authDisabled = process.env.NEXT_PUBLIC_ADMIN_AUTH_DISABLED === "true";
-    if (!authDisabled && !session) {
-      router.push("/admin/login");
-      return;
-    }
->>>>>>> main
+    // authentication removed — simply fetch content when id is present
     if (id) {
       fetchContent();
     }
-  }, [session, status, id]);
+  }, [id]);
 
   const fetchContent = async () => {
     const res = await fetch(`/api/content/${id}`);
@@ -90,7 +70,7 @@ export default function EditContent() {
     setUploading(false);
   };
 
-  if (status === "loading" || loading) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="min-h-screen bg-gray-100 py-10">
