@@ -1,24 +1,8 @@
-<<<<<<< HEAD
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../auth/[...nextauth]";
-=======
->>>>>>> main
 import dbConnect from "../../../lib/mongodb";
 import Content from "../../../lib/models/Content";
 
 export default async function handler(req, res) {
-<<<<<<< HEAD
-  const authDisabled = process.env.ADMIN_AUTH_DISABLED === "true";
-  const session = authDisabled
-    ? null
-    : await getServerSession(req, res, authOptions);
-
-  if (!authDisabled && !session) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
-=======
->>>>>>> main
+  // Authentication removed — admin access is open
   await dbConnect();
 
   if (req.method === "GET") {
