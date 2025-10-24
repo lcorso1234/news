@@ -35,19 +35,64 @@ export default function Podcast() {
         </p>
       </div>
 
-      <div className="text-sm text-gray-600">
-        Found {podcasts.length} podcast(s)
-      </div>
-
-      {podcasts.length === 0 ? (
-        <section className="text-center py-12">
-          <p className="font-serif text-xl text-gray-600">
-            No podcasts published yet. Check back soon for new episodes.
+      {/* Featured Podcast */}
+      {podcasts.length > 0 && (
+        <article className="border-4 border-black p-8">
+          <div className="text-xs font-bold uppercase tracking-wider mb-2 text-red-600">
+            Featured Episode
+          </div>
+          <h3 className="font-serif text-3xl md:text-4xl font-bold mb-4">
+            <span className="highlight">{podcasts[0].title}</span>
+          </h3>
+          <p className="font-serif text-lg text-gray-700 leading-relaxed mb-4">
+            {podcasts[0].description}
           </p>
-        </section>
-      ) : (
+          <div className="mb-6">
+            {podcasts[0].audioUrl ? (
+              podcasts[0].audioUrl.includes("spotify") ? (
+                <div className="w-full">
+                  <iframe
+                    src={podcasts[0].audioUrl.replace(
+                      "open.spotify.com/",
+                      "open.spotify.com/embed/"
+                    )}
+                    width="100%"
+                    height="152"
+                    frameBorder="0"
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                  ></iframe>
+                </div>
+              ) : podcasts[0].audioUrl.match(/\.(mp3|wav|ogg)$/i) ? (
+                <audio controls src={podcasts[0].audioUrl} className="w-full" />
+              ) : (
+                <a
+                  href={podcasts[0].audioUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-blue-600 underline"
+                >
+                  Open audio
+                </a>
+              )
+            ) : (
+              <div className="text-sm text-gray-500">
+                No audio file available
+              </div>
+            )}
+          </div>
+          <div className="flex items-center gap-4 text-sm font-serif text-gray-600">
+            <span>By {podcasts[0].author}</span>
+            <span>•</span>
+            <span>{new Date(podcasts[0].createdAt).toLocaleDateString()}</span>
+          </div>
+        </article>
+      )}
+
+      {/* More Episodes */}
+      {podcasts.length > 1 && (
         <div className="space-y-6">
-          {podcasts.map((ep) => (
+          {podcasts.slice(1).map((ep) => (
             <article key={ep._id} className="border-2 border-black p-6">
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-1">
@@ -105,6 +150,14 @@ export default function Podcast() {
             </article>
           ))}
         </div>
+      )}
+
+      {podcasts.length === 0 && (
+        <section className="text-center py-12">
+          <p className="font-serif text-xl text-gray-600">
+            No podcasts published yet. Check back soon for new episodes.
+          </p>
+        </section>
       )}
     </div>
   );
