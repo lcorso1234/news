@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Dependencies
 node_modules/
 npm-debug.log*
@@ -36,3 +37,7 @@ Thumbs.db
 # Archives
 *.tar.gz
 *.zip
+=======
+node_modules
+news-restored
+>>>>>>> main

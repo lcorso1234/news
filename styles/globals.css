@@ -38,6 +38,7 @@
 }
 
 @layer components {
+<<<<<<< HEAD
   /* Chartreuse highlighter (#E7FF00) - Full opacity */
   .highlight {
     background: linear-gradient(
@@ -88,6 +89,10 @@
 
   /* Neon green highlighter - Full opacity */
   .highlight-green {
+=======
+  /* Neon green highlighter - Full opacity */
+  .highlight {
+>>>>>>> main
     background: linear-gradient(
       to bottom,
       transparent 0%,
@@ -101,4 +106,55 @@
     display: inline;
     padding: 0 4px;
   }
+<<<<<<< HEAD
+=======
+
+  /* Neon pink highlighter - Full opacity */
+  .highlight-lime {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 20%,
+      rgb(255, 16, 240) 20%,
+      rgb(255, 16, 240) 95%,
+      transparent 95%,
+      transparent 100%
+    );
+    box-shadow: 2px 0 0 rgb(255, 16, 240), -2px 0 0 rgb(255, 16, 240);
+    display: inline;
+    padding: 0 4px;
+  }
+
+  /* Neon green highlighter - Full opacity */
+  .highlight-yellow {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 20%,
+      rgb(57, 255, 20) 20%,
+      rgb(57, 255, 20) 95%,
+      transparent 95%,
+      transparent 100%
+    );
+    box-shadow: 2px 0 0 rgb(57, 255, 20), -2px 0 0 rgb(57, 255, 20);
+    display: inline;
+    padding: 0 4px;
+  }
+
+  /* Neon pink highlighter - Full opacity */
+  .highlight-green {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 20%,
+      rgb(255, 16, 240) 20%,
+      rgb(255, 16, 240) 95%,
+      transparent 95%,
+      transparent 100%
+    );
+    box-shadow: 2px 0 0 rgb(255, 16, 240), -2px 0 0 rgb(255, 16, 240);
+    display: inline;
+    padding: 0 4px;
+  }
+>>>>>>> main
 }

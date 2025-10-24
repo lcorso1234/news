@@ -1,10 +1,16 @@
+<<<<<<< HEAD
 import { useSession } from "next-auth/react";
+=======
+>>>>>>> main
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function EditContent() {
+<<<<<<< HEAD
   const { data: session, status } = useSession();
+=======
+>>>>>>> main
   const router = useRouter();
   const { id } = router.query;
   const {
@@ -19,6 +25,15 @@ export default function EditContent() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+<<<<<<< HEAD
+=======
+    if (status === "loading") return;
+    const authDisabled = process.env.NEXT_PUBLIC_ADMIN_AUTH_DISABLED === "true";
+    if (!authDisabled && !session) {
+      router.push("/admin/login");
+      return;
+    }
+>>>>>>> main
     if (id) {
       fetchContent();
     }
