@@ -41,6 +41,7 @@ export const config = {
 };
 
 export default async function handler(req, res) {
+  // Authentication removed — uploads open
   if (req.method === "POST") {
     upload.single("file")(req, res, (err) => {
       if (err) {

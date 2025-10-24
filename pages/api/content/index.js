@@ -2,6 +2,7 @@ import dbConnect from "../../../lib/mongodb";
 import Content from "../../../lib/models/Content";
 
 export default async function handler(req, res) {
+  // Authentication removed — admin access is open
   await dbConnect();
 
   if (req.method === "GET") {

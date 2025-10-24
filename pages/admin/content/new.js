@@ -57,6 +57,7 @@ export default function NewContent() {
     setUploading(false);
   };
 
+  // auth removed — open admin
   return (
     <div className="min-h-screen bg-gray-100 py-10">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">

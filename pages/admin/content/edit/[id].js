@@ -17,16 +17,11 @@ export default function EditContent() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (status === "loading") return;
-    const authDisabled = process.env.NEXT_PUBLIC_ADMIN_AUTH_DISABLED === "true";
-    if (!authDisabled && !session) {
-      router.push("/admin/login");
-      return;
-    }
+    // authentication removed — simply fetch content when id is present
     if (id) {
       fetchContent();
     }
-  }, [session, status, id]);
+  }, [id]);
 
   const fetchContent = async () => {
     const res = await fetch(`/api/content/${id}`);
@@ -79,7 +74,7 @@ export default function EditContent() {
     setUploading(false);
   };
 
-  if (status === "loading" || loading) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="min-h-screen bg-gray-100 py-10">

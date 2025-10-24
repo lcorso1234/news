@@ -38,6 +38,55 @@
 }
 
 @layer components {
+  <<<<<<< HEAD
+  /* Chartreuse highlighter (#E7FF00) - Full opacity */
+  .highlight {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 20%,
+      rgb(231, 255, 0) 20%,
+      rgb(231, 255, 0) 95%,
+      transparent 95%,
+      transparent 100%
+    );
+    box-shadow: 2px 0 0 rgb(231, 255, 0), -2px 0 0 rgb(231, 255, 0);
+    display: inline;
+    padding: 0 4px;
+  }
+
+  /* Bright lime highlighter - Full opacity */
+  .highlight-lime {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 20%,
+      rgb(204, 255, 0) 20%,
+      rgb(204, 255, 0) 95%,
+      transparent 95%,
+      transparent 100%
+    );
+    box-shadow: 2px 0 0 rgb(204, 255, 0), -2px 0 0 rgb(204, 255, 0);
+    display: inline;
+    padding: 0 4px;
+  }
+
+  /* Electric yellow highlighter - Full opacity */
+  .highlight-yellow {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 20%,
+      rgb(255, 255, 0) 20%,
+      rgb(255, 255, 0) 95%,
+      transparent 95%,
+      transparent 100%
+    );
+    box-shadow: 2px 0 0 rgb(255, 255, 0), -2px 0 0 rgb(255, 255, 0);
+    display: inline;
+    padding: 0 4px;
+  }
+
   /* Neon green highlighter - Full opacity */
   .highlight {
     background: linear-gradient(
