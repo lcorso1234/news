@@ -15,14 +15,6 @@ export default function NewContent() {
   } = useForm();
   const [uploading, setUploading] = useState(false);
 
-  useEffect(() => {
-    if (status === "loading") return;
-    const authDisabled = process.env.NEXT_PUBLIC_ADMIN_AUTH_DISABLED === "true";
-    if (!authDisabled && !session) {
-      router.push("/admin/login");
-    }
-  }, [session, status]);
-
   const type = watch("type");
 
   const onSubmit = async (data) => {

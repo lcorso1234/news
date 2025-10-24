@@ -19,13 +19,6 @@ export default function EditContent() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (status === "loading") return;
-    const authDisabled = process.env.NEXT_PUBLIC_ADMIN_AUTH_DISABLED === "true";
-    if (!authDisabled && !session) {
-      router.push("/admin/login");
-      return;
-    }
-
     if (id) {
       fetchContent();
     }

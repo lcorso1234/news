@@ -1,22 +1,13 @@
-import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function AdminDashboard() {
-  const { data: session, status } = useSession();
   const router = useRouter();
   const [contents, setContents] = useState([]);
 
   useEffect(() => {
-    if (status === "loading") return;
-    const authDisabled = process.env.NEXT_PUBLIC_ADMIN_AUTH_DISABLED === "true";
-    if (!authDisabled && !session) {
-      router.push("/admin/login");
-      return;
-    }
-
     fetchContents();
-  }, [session, status]);
+  }, []);
 
   const fetchContents = async () => {
     const res = await fetch("/api/content");
@@ -40,8 +31,6 @@ export default function AdminDashboard() {
     fetchContents();
   };
 
-  if (status === "loading") return <div>Loading...</div>;
-
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="py-10">
@@ -57,12 +46,6 @@ export default function AdminDashboard() {
                   className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md"
                 >
                   Add New Content
-                </button>
-                <button
-                  onClick={() => signOut()}
-                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md"
-                >
-                  Sign Out
                 </button>
               </div>
             </div>
