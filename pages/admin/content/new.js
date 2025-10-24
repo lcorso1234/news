@@ -1,3 +1,7 @@
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+
 export default function NewContent() {
   const router = useRouter();
   const {
