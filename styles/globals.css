@@ -38,7 +38,7 @@
 }
 
 @layer components {
-<<<<<<< HEAD
+  <<<<<<< HEAD
   /* Chartreuse highlighter (#E7FF00) - Full opacity */
   .highlight {
     background: linear-gradient(
@@ -88,11 +88,7 @@
   }
 
   /* Neon green highlighter - Full opacity */
-  .highlight-green {
-=======
-  /* Neon green highlighter - Full opacity */
   .highlight {
->>>>>>> main
     background: linear-gradient(
       to bottom,
       transparent 0%,
@@ -106,8 +102,6 @@
     display: inline;
     padding: 0 4px;
   }
-<<<<<<< HEAD
-=======
 
   /* Neon pink highlighter - Full opacity */
   .highlight-lime {
@@ -156,5 +150,4 @@
     display: inline;
     padding: 0 4px;
   }
->>>>>>> main
 }
