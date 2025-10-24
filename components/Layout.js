@@ -1,3 +1,4 @@
+// Main layout component for the news site
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -14,24 +15,28 @@ export default function Layout({ children }) {
     const pageTitle = document.title;
     const pageUrl = window.location.href;
 
-    if (window.confirm(`Bookmark this page?\n\n${pageTitle}`)) {
-      // Try to use the browser's bookmark API if available
-      if (window.sidebar && window.sidebar.addPanel) {
-        // Firefox
-        window.sidebar.addPanel(pageTitle, pageUrl, "");
-      } else if (window.external && "AddFavorite" in window.external) {
-        // IE
-        window.external.AddFavorite(pageUrl, pageTitle);
-      } else {
-        // For other browsers, show instructions
-        alert(
-          "Press " +
-            (navigator.userAgent.toLowerCase().indexOf("mac") != -1
-              ? "Cmd"
-              : "Ctrl") +
-            "+D to bookmark this page."
-        );
-      }
+    // Get existing bookmarks from localStorage
+    const bookmarks = JSON.parse(localStorage.getItem("siteBookmarks") || "[]");
+
+    // Check if page is already bookmarked
+    const isBookmarked = bookmarks.some((b) => b.url === pageUrl);
+
+    if (isBookmarked) {
+      // Remove bookmark
+      const updatedBookmarks = bookmarks.filter((b) => b.url !== pageUrl);
+      localStorage.setItem("siteBookmarks", JSON.stringify(updatedBookmarks));
+      alert("Bookmark removed!");
+    } else {
+      // Add bookmark
+      bookmarks.push({
+        title: pageTitle,
+        url: pageUrl,
+        date: new Date().toISOString(),
+      });
+      localStorage.setItem("siteBookmarks", JSON.stringify(bookmarks));
+      alert(
+        "Page bookmarked! Click the bookmark icon to view your saved pages."
+      );
     }
   };
 
