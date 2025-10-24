@@ -1,4 +1,49 @@
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
 export default function Home() {
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [videos, setVideos] = useState([]);
+  const [podcasts, setPodcasts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchAllContent();
+  }, []);
+
+  const fetchAllContent = async () => {
+    try {
+      // Fetch blog posts
+      const blogRes = await fetch("/api/content?type=blog&published=true");
+      const blogData = await blogRes.json();
+      setBlogPosts(blogData.slice(0, 6)); // Get first 6 posts
+
+      // Fetch videos
+      const videoRes = await fetch("/api/content?type=video&published=true");
+      const videoData = await videoRes.json();
+      setVideos(videoData.slice(0, 3)); // Get first 3 videos
+
+      // Fetch podcasts
+      const podcastRes = await fetch(
+        "/api/content?type=podcast&published=true"
+      );
+      const podcastData = await podcastRes.json();
+      setPodcasts(podcastData.slice(0, 3)); // Get first 3 podcasts
+    } catch (error) {
+      console.error("Error fetching content:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-xl font-serif">Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-12">
       {/* Category Header */}
@@ -16,227 +61,258 @@ export default function Home() {
         </p>
       </div>
 
-      {/* Featured Stories */}
-      <section>
-        <div className="border-l-4 border-black pl-6 mb-6">
-          <h3 className="font-serif text-3xl font-bold mb-2">
-            Featured Stories
-          </h3>
-          <p className="text-sm text-gray-600 font-serif italic">
-            TODAY'S TOP DAILY LIFE STORIES
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <article className="border-2 border-black p-6 hover:shadow-lg transition-shadow">
-            <div className="text-xs font-bold uppercase tracking-wider mb-2">
-              Community Voice
-            </div>
-            <h4 className="font-serif text-2xl font-bold mb-3">
-              <span className="highlight">
-                The Morning Commute: Stories from the 6 AM Train
-              </span>
-            </h4>
-            <p className="font-serif text-gray-700 leading-relaxed mb-4">
-              Every morning, thousands of people board the same train. We spoke
-              to regular commuters about their daily routines, dreams, and the
-              small moments that make life worth living. From the coffee vendor
-              to the college student, these are the voices that matter.
+      {/* Featured Stories - Blog Posts */}
+      {blogPosts.length > 0 && (
+        <section>
+          <div className="border-l-4 border-black pl-6 mb-6">
+            <h3 className="font-serif text-3xl font-bold mb-2">
+              Featured Stories
+            </h3>
+            <p className="text-sm text-gray-600 font-serif italic">
+              LATEST BLOG POSTS
             </p>
-            <div className="text-sm text-gray-600 font-serif">
-              By Maria Chen • 15 minutes ago
-            </div>
-          </article>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {blogPosts.slice(0, 2).map((post, index) => (
+              <Link
+                key={post._id}
+                href={`/blog/${post.slug}`}
+                className="border-2 border-black p-6 hover:shadow-lg transition-shadow"
+              >
+                <div className="text-xs font-bold uppercase tracking-wider mb-2">
+                  Blog
+                </div>
+                <h4 className="font-serif text-2xl font-bold mb-3">
+                  <span
+                    className={index === 0 ? "highlight" : "highlight-lime"}
+                  >
+                    {post.title}
+                  </span>
+                </h4>
+                <p className="font-serif text-gray-700 leading-relaxed mb-4">
+                  {post.description}
+                </p>
+                <div className="text-sm text-gray-600 font-serif">
+                  By {post.author} •{" "}
+                  {new Date(post.createdAt).toLocaleDateString()}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
-          <article className="border-2 border-black p-6 hover:shadow-lg transition-shadow">
-            <div className="text-xs font-bold uppercase tracking-wider mb-2">
-              Local Impact
-            </div>
-            <h4 className="font-serif text-2xl font-bold mb-3">
-              <span className="highlight-lime">
-                Corner Store Owner Reflects on 30 Years of Neighborhood Changes
-              </span>
-            </h4>
-            <p className="font-serif text-gray-700 leading-relaxed mb-4">
-              Mrs. Rodriguez has been running the same corner store for three
-              decades. She's witnessed the neighborhood transform, seen children
-              grow into parents, and remained a constant in an ever-changing
-              community. Her story is everyone's story.
+      {/* Videos Section */}
+      {videos.length > 0 && (
+        <section>
+          <div className="border-l-4 border-black pl-6 mb-6">
+            <h3 className="font-serif text-3xl font-bold mb-2">
+              Video Reports
+            </h3>
+            <p className="text-sm text-gray-600 font-serif italic">
+              LATEST VIDEO CONTENT
             </p>
-            <div className="text-sm text-gray-600 font-serif">
-              By James O'Brien • 1 hour ago
-            </div>
-          </article>
-        </div>
-      </section>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {videos.map((video) => (
+              <Link
+                key={video._id}
+                href={`/blog/${video.slug}`}
+                className="block border-2 border-black hover:shadow-lg transition-shadow cursor-pointer"
+              >
+                <div className="aspect-video bg-gray-200 border-b-2 border-black flex items-center justify-center relative">
+                  {video.imageUrl ? (
+                    <img
+                      src={video.imageUrl}
+                      alt={video.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="white"
+                        className="w-8 h-8 ml-1"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                <div className="p-4">
+                  <div className="text-xs font-bold uppercase tracking-wider mb-2">
+                    Video
+                  </div>
+                  <h4 className="font-serif text-lg font-bold mb-2">
+                    {video.title}
+                  </h4>
+                  <p className="text-xs text-gray-600 font-serif line-clamp-2 mb-2">
+                    {video.description}
+                  </p>
+                  <div className="text-xs text-gray-600 font-serif">
+                    {new Date(video.createdAt).toLocaleDateString()}
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
-      {/* Community Voices */}
-      <section>
-        <div className="border-l-4 border-black pl-6 mb-6">
-          <h3 className="font-serif text-3xl font-bold mb-2">
-            Community Voices
-          </h3>
-          <p className="text-sm text-gray-600 font-serif italic">
-            PERSPECTIVES FROM YOUR NEIGHBORS
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <article className="border-2 border-black p-6 hover:shadow-lg transition-shadow">
-            <div className="text-xs font-bold uppercase tracking-wider mb-2">
-              Straight Talk
-            </div>
-            <h4 className="font-serif text-2xl font-bold mb-3">
-              <span className="highlight-yellow">
-                "Why Should I Care About Celebrity Drama?"
-              </span>
-            </h4>
-            <p className="font-serif text-gray-700 leading-relaxed mb-4">
-              Local teacher Amanda Brooks speaks for millions when she says
-              she's tired of manufactured outrage and celebrity feuds. "I've got
-              bills to pay and kids to feed," she says. "The real world is
-              happening right here, right now."
+      {/* Podcasts Section */}
+      {podcasts.length > 0 && (
+        <section>
+          <div className="border-l-4 border-black pl-6 mb-6">
+            <h3 className="font-serif text-3xl font-bold mb-2">
+              Latest Podcasts
+            </h3>
+            <p className="text-sm text-gray-600 font-serif italic">
+              RECENT EPISODES
             </p>
-            <div className="text-sm text-gray-600 font-serif">
-              By David Kim • 2 hours ago
-            </div>
-          </article>
+          </div>
+          <div className="space-y-6">
+            {podcasts.map((podcast) => (
+              <Link
+                key={podcast._id}
+                href={`/blog/${podcast.slug}`}
+                className="block border-2 border-black p-6 hover:shadow-lg transition-shadow cursor-pointer"
+              >
+                <div className="flex gap-6">
+                  <div className="flex-shrink-0 w-32 h-32 bg-gray-200 border border-black flex items-center justify-center">
+                    {podcast.imageUrl ? (
+                      <img
+                        src={podcast.imageUrl}
+                        alt={podcast.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-12 h-12"
+                      >
+                        <path d="M8.25 4.5a3.75 3.75 0 117.5 0v8.25a3.75 3.75 0 11-7.5 0V4.5z" />
+                        <path d="M6 10.5a.75.75 0 01.75.75v1.5a5.25 5.25 0 1010.5 0v-1.5a.75.75 0 011.5 0v1.5a6.751 6.751 0 01-6 6.709v2.291h3a.75.75 0 010 1.5h-7.5a.75.75 0 010-1.5h3v-2.291a6.751 6.751 0 01-6-6.709v-1.5A.75.75 0 016 10.5z" />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-xs font-bold uppercase tracking-wider mb-2">
+                      Podcast
+                    </div>
+                    <h4 className="font-serif text-2xl font-bold mb-2">
+                      {podcast.title}
+                    </h4>
+                    <p className="font-serif text-gray-700 mb-3 line-clamp-2">
+                      {podcast.description}
+                    </p>
+                    <div className="text-sm font-serif text-gray-600">
+                      By {podcast.author} •{" "}
+                      {new Date(podcast.createdAt).toLocaleDateString()}
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
-          <article className="border-2 border-black p-6 hover:shadow-lg transition-shadow">
-            <div className="text-xs font-bold uppercase tracking-wider mb-2">
-              Reality Check
-            </div>
-            <h4 className="font-serif text-2xl font-bold mb-3">
-              <span className="highlight-green">
-                Construction Worker: "We're Building Your City, But Nobody
-                Notices"
-              </span>
-            </h4>
-            <p className="font-serif text-gray-700 leading-relaxed mb-4">
-              Mike Santos has worked construction for 15 years. While others
-              scroll through sensational headlines, he and his crew are up at
-              dawn, building the infrastructure that keeps the city running.
-              "Real work deserves real recognition," he says.
+      {/* More Blog Posts */}
+      {blogPosts.length > 2 && (
+        <section>
+          <div className="border-l-4 border-black pl-6 mb-6">
+            <h3 className="font-serif text-3xl font-bold mb-2">More Stories</h3>
+            <p className="text-sm text-gray-600 font-serif italic">
+              ADDITIONAL BLOG POSTS
             </p>
-            <div className="text-sm text-gray-600 font-serif">
-              By Sarah Thompson • 3 hours ago
-            </div>
-          </article>
-        </div>
-      </section>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {blogPosts.slice(2, 5).map((post) => (
+              <Link
+                key={post._id}
+                href={`/blog/${post.slug}`}
+                className="border border-black p-4 hover:shadow-lg transition-shadow"
+              >
+                <h4 className="font-serif text-xl font-bold mb-2">
+                  {post.title}
+                </h4>
+                <p className="font-serif text-sm text-gray-700 mb-2 line-clamp-3">
+                  {post.description}
+                </p>
+                <div className="text-xs text-gray-600 font-serif">
+                  {new Date(post.createdAt).toLocaleDateString()}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
-      {/* Quick Reads */}
-      <section>
-        <div className="border-l-4 border-black pl-6 mb-6">
-          <h3 className="font-serif text-3xl font-bold mb-2">Quick Reads</h3>
-          <p className="text-sm text-gray-600 font-serif italic">
-            BITE-SIZED DAILY LIFE STORIES
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <article className="border border-black p-4 hover:shadow-lg transition-shadow">
-            <h4 className="font-serif text-xl font-bold mb-2">
-              The Art of the Home-Cooked Meal
-            </h4>
-            <p className="font-serif text-sm text-gray-700 mb-2">
-              In an age of delivery apps, families still gather around the
-              dinner table. We explore why.
+      {/* Latest Updates */}
+      {blogPosts.length > 5 && (
+        <section>
+          <div className="border-l-4 border-black pl-6 mb-6">
+            <h3 className="font-serif text-3xl font-bold mb-2">
+              Latest Updates
+            </h3>
+            <p className="text-sm text-gray-600 font-serif italic">
+              JUST PUBLISHED
             </p>
-            <div className="text-xs text-gray-600 font-serif">5 hours ago</div>
-          </article>
+          </div>
+          <div className="space-y-4">
+            {blogPosts.slice(5).map((post) => (
+              <Link
+                key={post._id}
+                href={`/blog/${post.slug}`}
+                className="flex gap-4 p-4 border-b-2 border-gray-300 hover:bg-gray-50 transition-colors"
+              >
+                <div className="flex-shrink-0 w-32 h-32 bg-gray-200 border border-black">
+                  {post.imageUrl && (
+                    <img
+                      src={post.imageUrl}
+                      alt={post.title}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
+                </div>
+                <div className="flex-1">
+                  <div className="text-xs font-bold uppercase tracking-wider mb-1">
+                    Blog
+                  </div>
+                  <h4 className="font-serif text-xl font-bold mb-2">
+                    {post.title}
+                  </h4>
+                  <p className="font-serif text-sm text-gray-700 mb-2 line-clamp-2">
+                    {post.description}
+                  </p>
+                  <div className="text-xs text-gray-600 font-serif">
+                    {new Date(post.createdAt).toLocaleDateString()}
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
-          <article className="border border-black p-4 hover:shadow-lg transition-shadow">
-            <h4 className="font-serif text-xl font-bold mb-2">
-              Parks and Recreation: Where Communities Connect
-            </h4>
-            <p className="font-serif text-sm text-gray-700 mb-2">
-              The local park remains the heart of neighborhood life, from dawn
-              joggers to sunset picnics.
+      {/* Show message if no content */}
+      {blogPosts.length === 0 &&
+        videos.length === 0 &&
+        podcasts.length === 0 && (
+          <section className="text-center py-12">
+            <p className="font-serif text-xl text-gray-600">
+              No content published yet. Check back soon for new articles,
+              videos, and podcasts.
             </p>
-            <div className="text-xs text-gray-600 font-serif">6 hours ago</div>
-          </article>
-
-          <article className="border border-black p-4 hover:shadow-lg transition-shadow">
-            <h4 className="font-serif text-xl font-bold mb-2">
-              Small Businesses, Big Impact
-            </h4>
-            <p className="font-serif text-sm text-gray-700 mb-2">
-              Local entrepreneurs share how they're keeping their dreams alive
-              in challenging times.
-            </p>
-            <div className="text-xs text-gray-600 font-serif">8 hours ago</div>
-          </article>
-        </div>
-      </section>
-
-      {/* Latest from Daily Life */}
-      <section>
-        <div className="border-l-4 border-black pl-6 mb-6">
-          <h3 className="font-serif text-3xl font-bold mb-2">
-            Latest from Daily Life
-          </h3>
-          <p className="text-sm text-gray-600 font-serif italic">
-            JUST PUBLISHED
-          </p>
-        </div>
-        <div className="space-y-4">
-          <article className="flex gap-4 p-4 border-b-2 border-gray-300 hover:bg-gray-50 transition-colors">
-            <div className="flex-shrink-0 w-32 h-32 bg-gray-200 border border-black"></div>
-            <div className="flex-1">
-              <div className="text-xs font-bold uppercase tracking-wider mb-1">
-                Breaking
-              </div>
-              <h4 className="font-serif text-xl font-bold mb-2">
-                Local Library Expansion Approved After Years of Community
-                Advocacy
-              </h4>
-              <p className="font-serif text-sm text-gray-700 mb-2">
-                After three years of petition drives and town halls, the
-                community's efforts have paid off. The library will double in
-                size, adding a children's reading room and technology center.
-              </p>
-              <div className="text-xs text-gray-600 font-serif">Just now</div>
-            </div>
-          </article>
-
-          <article className="flex gap-4 p-4 border-b-2 border-gray-300 hover:bg-gray-50 transition-colors">
-            <div className="flex-shrink-0 w-32 h-32 bg-gray-200 border border-black"></div>
-            <div className="flex-1">
-              <div className="text-xs font-bold uppercase tracking-wider mb-1">
-                Community
-              </div>
-              <h4 className="font-serif text-xl font-bold mb-2">
-                Retired Teacher Starts Free Tutoring Program in Community Center
-              </h4>
-              <p className="font-serif text-sm text-gray-700 mb-2">
-                Every Tuesday and Thursday, Mr. Patterson opens his makeshift
-                classroom to any student who needs help. "Education should be
-                accessible to everyone," he insists.
-              </p>
-              <div className="text-xs text-gray-600 font-serif">
-                30 minutes ago
-              </div>
-            </div>
-          </article>
-
-          <article className="flex gap-4 p-4 hover:bg-gray-50 transition-colors">
-            <div className="flex-shrink-0 w-32 h-32 bg-gray-200 border border-black"></div>
-            <div className="flex-1">
-              <div className="text-xs font-bold uppercase tracking-wider mb-1">
-                Daily Life
-              </div>
-              <h4 className="font-serif text-xl font-bold mb-2">
-                The Return of the Block Party: Neighbors Reconnecting
-                Post-Pandemic
-              </h4>
-              <p className="font-serif text-sm text-gray-700 mb-2">
-                Streets are filling with folding tables, grills, and laughter as
-                communities rediscover the joy of gathering together. It's more
-                than a party—it's a revival.
-              </p>
-              <div className="text-xs text-gray-600 font-serif">1 hour ago</div>
-            </div>
-          </article>
-        </div>
-      </section>
+          </section>
+        )}
     </div>
   );
 }

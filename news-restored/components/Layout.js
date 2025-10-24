@@ -6,111 +6,11 @@ import { motion } from "framer-motion";
 export default function Layout({ children }) {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [showAnnouncement, setShowAnnouncement] = useState(false);
 
   const isActive = (path) => router.pathname === path;
 
-  const handleBookmark = () => {
-    const pageTitle = document.title;
-    const pageUrl = window.location.href;
-
-    if (window.confirm(`Bookmark this page?\n\n${pageTitle}`)) {
-      // Try to use the browser's bookmark API if available
-      if (window.sidebar && window.sidebar.addPanel) {
-        // Firefox
-        window.sidebar.addPanel(pageTitle, pageUrl, "");
-      } else if (window.external && "AddFavorite" in window.external) {
-        // IE
-        window.external.AddFavorite(pageUrl, pageTitle);
-      } else {
-        // For other browsers, show instructions
-        alert(
-          "Press " +
-            (navigator.userAgent.toLowerCase().indexOf("mac") != -1
-              ? "Cmd"
-              : "Ctrl") +
-            "+D to bookmark this page."
-        );
-      }
-    }
-  };
-
-  const handleShare = async () => {
-    const shareData = {
-      title: document.title,
-      text: "Check out this article from The Daily Truth",
-      url: window.location.href,
-    };
-
-    try {
-      if (navigator.share) {
-        await navigator.share(shareData);
-      } else {
-        // Fallback: copy link to clipboard
-        await navigator.clipboard.writeText(window.location.href);
-        alert("Link copied to clipboard!");
-      }
-    } catch (err) {
-      console.log("Error sharing:", err);
-    }
-  };
-
-  const handleAnnouncement = () => {
-    setShowAnnouncement(true);
-  };
-
   return (
     <div className="min-h-screen bg-white text-black flex flex-col">
-      {/* Announcement Popup */}
-      {showAnnouncement && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-          onClick={() => setShowAnnouncement(false)}
-        >
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.8, opacity: 0 }}
-            transition={{ type: "spring", damping: 20 }}
-            onClick={(e) => e.stopPropagation()}
-            className="bg-white border-4 border-black rounded-2xl p-8 max-w-md mx-4 shadow-2xl"
-          >
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-12 h-12 bg-black rounded-full flex items-center justify-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-6 h-6 text-white"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46"
-                  />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <h3 className="font-serif text-2xl font-bold mb-2">
-                  Announcement
-                </h3>
-                <p className="font-serif text-lg text-gray-700 leading-relaxed">
-                  Welcome to Real News by Real People. Because Real People don't
-                  really care.
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={() => setShowAnnouncement(false)}
-              className="w-full px-6 py-3 bg-black text-white font-bold rounded-lg hover:bg-gray-800 transition-colors"
-            >
-              Got it!
-            </button>
-          </motion.div>
-        </div>
-      )}
       {/* Newspaper Header */}
       <header className="border-b-4 border-black">
         <div className="max-w-7xl mx-auto px-4 py-6">
@@ -189,16 +89,10 @@ export default function Layout({ children }) {
         className="hidden lg:flex fixed left-0 right-0 justify-center z-30"
         style={{ bottom: "18px" }}
       >
-        <div
-          className="bg-white border-2 border-black shadow-2xl px-4 py-2"
-          style={{ borderRadius: "8px" }}
-        >
+        <div className="bg-white border-2 border-black rounded-full shadow-2xl px-4 py-2">
           <div className="flex items-center gap-3">
             {/* Bookmark Icon - Far Left */}
-            <button
-              onClick={handleBookmark}
-              className="w-10 h-10 flex items-center justify-center rounded-lg border-2 border-black bg-transparent hover:bg-black hover:text-white transition-colors group"
-            >
+            <button className="w-10 h-10 flex items-center justify-center rounded-lg border-2 border-black bg-transparent hover:bg-black hover:text-white transition-colors group">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -261,10 +155,7 @@ export default function Layout({ children }) {
             </Link>
 
             {/* Right Icons */}
-            <button
-              onClick={handleShare}
-              className="w-10 h-10 flex items-center justify-center rounded-lg bg-black hover:bg-gray-800 transition-colors"
-            >
+            <button className="w-10 h-10 flex items-center justify-center rounded-lg bg-black hover:bg-gray-800 transition-colors">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -281,10 +172,7 @@ export default function Layout({ children }) {
               </svg>
             </button>
 
-            <button
-              onClick={handleAnnouncement}
-              className="w-10 h-10 flex items-center justify-center rounded-lg bg-black hover:bg-gray-800 transition-colors"
-            >
+            <button className="w-10 h-10 flex items-center justify-center rounded-lg bg-black hover:bg-gray-800 transition-colors">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -301,12 +189,7 @@ export default function Layout({ children }) {
               </svg>
             </button>
 
-            <button
-              onClick={() =>
-                (window.location.href = "mailto:lawrencecorso1@gmail.com")
-              }
-              className="w-10 h-10 flex items-center justify-center rounded-lg bg-black hover:bg-gray-800 transition-colors"
-            >
+            <button className="w-10 h-10 flex items-center justify-center rounded-lg bg-black hover:bg-gray-800 transition-colors">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -335,7 +218,6 @@ export default function Layout({ children }) {
           <div className="flex items-center justify-between max-w-md mx-auto">
             {/* Share Icon */}
             <motion.button
-              onClick={handleShare}
               whileTap={{ scale: 0.9 }}
               whileHover={{ scale: 1.05 }}
               className="w-12 h-12 flex items-center justify-center rounded-xl bg-white hover:bg-gray-200 shadow-lg transition-transform"
@@ -374,7 +256,6 @@ export default function Layout({ children }) {
 
             {/* Announcement Icon */}
             <motion.button
-              onClick={handleAnnouncement}
               whileTap={{ scale: 0.9 }}
               whileHover={{ scale: 1.05 }}
               className="w-12 h-12 flex items-center justify-center rounded-xl bg-white hover:bg-gray-200 shadow-lg transition-transform"

@@ -3,7 +3,6 @@ import Layout from "../components/Layout";
 import Preloader from "../components/Preloader";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
-import { SessionProvider } from "next-auth/react";
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -36,7 +35,7 @@ export default function MyApp({ Component, pageProps }) {
   };
 
   return (
-    <SessionProvider session={pageProps.session}>
+    <>
       <Preloader />
       <Layout>
         <AnimatePresence mode="wait">
@@ -52,6 +51,6 @@ export default function MyApp({ Component, pageProps }) {
           </motion.div>
         </AnimatePresence>
       </Layout>
-    </SessionProvider>
+    </>
   );
 }
